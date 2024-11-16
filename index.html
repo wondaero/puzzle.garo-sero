@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가로세로 퍼즐</title>
+    <style>
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff') format('woff');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff') format('woff');
+            font-weight: 800;
+            font-style: normal;
+        }
+
+        html, body{
+            height: 100%;
+        }
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Pretendard;
+        }
+        .puzzle-wrapper{
+            width: 800px;
+            height: 800px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            box-shadow: inset 0 0 1px #000;
+            margin-right: 50px;
+        }
+        .puzzle-wrapper > div{
+            width: 10%;
+            height: 10%;
+            box-shadow: inset 0 0 1px #fff;
+            background: #555;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+        .puzzle-wrapper > div.hover{
+            background: #ff0!important;
+        }
+        .puzzle-wrapper > div[data-g]{background: #fff; box-shadow: inset 0 0 1px #000;}
+        .puzzle-wrapper > div[data-s]{background: #fff; box-shadow: inset 0 0 1px #000;}
+        /* .puzzle-wrapper > div[data-s][data-g]{background: #ff0;} */
+
+        .puzzle-wrapper > div[data-num]:after{
+            content: '1';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 20px;
+            color: #888;
+        }
+        .puzzle-wrapper > div[data-num][data-g="1"]:after{content: '1';}
+        .puzzle-wrapper > div[data-num][data-g="2"]:after{content: '2';}
+        
+        
+        .puzzle-wrapper > div[data-num][data-g="9"]:after{content: '9';}
+        
+        .puzzle-wrapper > div[data-num][data-s="1"]:after{content: '1';}
+        .puzzle-wrapper > div[data-num][data-s="2"]:after{content: '2';}
+        .puzzle-wrapper > div[data-num][data-s="9"]:after{content: '9';}
+        .puzzle-wrapper > div[data-num][data-g="12"]:after{content: '12';}
+        .puzzle-wrapper > div[data-num][data-s="14"]:after{content: '14';}
+        
+        .puzzle-wrapper > div[data-num][data-s="16"]:after{content: '16';}
+        
+        .puzzle-wrapper > div[data-num][data-s="18"]:after{content: '18';}
+        .puzzle-wrapper > div[data-num][data-s="19"]:after{content: '19';}
+        .puzzle-wrapper > div[data-num][data-s="21"]:after{content: '21';}
+        .puzzle-wrapper > div[data-num][data-s="22"]:after{content: '22';}
+        
+        .puzzle-wrapper > div[data-num][data-g="3"]:after{content: '3';}
+        .puzzle-wrapper > div[data-num][data-g="4"]:after{content: '4';}
+        .puzzle-wrapper > div[data-num][data-g="5"]:after{content: '5';}
+        .puzzle-wrapper > div[data-num][data-g="6"]:after{content: '6';}
+        .puzzle-wrapper > div[data-num][data-g="7"]:after{content: '7';}
+        .puzzle-wrapper > div[data-num][data-g="10"]:after{content: '10';}
+        .puzzle-wrapper > div[data-num][data-g="11"]:after{content: '11';}
+        .puzzle-wrapper > div[data-num][data-s="15"]:after{content: '15';}
+        .puzzle-wrapper > div[data-num][data-s="17"]:after{content: '17';}
+        .puzzle-wrapper > div[data-num][data-s="20"]:after{content: '20';}
+        .puzzle-wrapper > div[data-num][data-g="13"]:after{content: '13';}
+        .puzzle-wrapper > div[data-num][data-g="8"]:after{content: '8';}
+
+        .quiz-wrapper{
+            height: 800px;
+            overflow-y: auto;
+        }
+        .quiz-wrapper h4{
+            margin: 5px 0;
+            padding: 5px 10px;
+            font-size: 30px;
+            background: linear-gradient(to right, #ff0, transparent);
+        }
+        .quiz-wrapper ul{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            margin-left: 10px;
+        }
+        .quiz-wrapper ul li{
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+            background: #eee;
+            padding: 10px;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        .quiz-wrapper ul li:last-of-type{
+            margin-bottom: 0;
+        }
+        .quiz-wrapper ul li > div{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        .quiz-wrapper ul li > div strong{
+            width: 24px;
+            margin-right: 10px;
+        }
+        .quiz-wrapper ul li > button{
+            width: 120px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgb(246, 240, 125);
+            border-radius: 5px;
+            border: 0;
+            font-size: 18px;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .all-btn-wrapper{
+            display: flex;
+            margin-top: 10px;
+        }
+        .all-btn-wrapper button{
+            background: #f00;
+            color: #fff;
+            width: 100%;
+            border: 0;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="puzzle-wrapper">
+        <div data-g="1" data-s="1" data-num="true"></div><div data-g="1"></div><div data-g="1" data-s="16" data-num="true"></div><div data-g="1"></div><div></div><div data-g="2" data-s="2" data-num="true"></div><div data-g="2"></div><div data-g="2"></div><div data-g="2" data-s="21" data-num="true"></div><div></div>
+        <div data-s="1"></div><div></div><div data-s="16"></div><div></div><div></div><div data-s="2"></div><div></div><div></div><div data-g="3" data-s="21" data-num="true"></div><div data-g="3"></div>
+        <div data-s="1"></div><div></div><div data-s="16"></div><div></div><div></div><div data-s="2" data-g="4" data-num="true"></div><div data-g="4"></div><div></div><div></div><div></div>
+        <div data-s="1"></div><div></div><div data-s="16" data-g="5" data-num="true"></div><div data-g="5"></div><div data-g="5" data-s="17" data-num="true"></div><div data-s="2" data-g="5"></div><div></div><div data-s="19" data-num="true"></div><div></div><div data-s="22" data-num="true"></div>
+        <div data-s="1" data-g="6" data-num="true"></div><div data-g="6" data-s="15" data-num="true"></div><div></div><div></div><div data-s="17"></div><div></div><div></div><div data-s="19" data-g="7" data-num="true"></div><div data-g="7"></div><div data-g="7" data-s="22"></div>
+        <div></div><div data-s="15"></div><div></div><div></div><div data-s="17" data-g="8" data-num="true"></div><div data-g="8"></div><div data-g="8"></div><div data-g="8" data-s="19"></div><div></div><div data-s="22"></div>
+        <div></div><div></div><div data-g="9" data-s="9" data-num="true"></div><div data-g="9"></div><div data-g="9" data-s="17"></div><div></div><div></div><div data-s="19"></div><div></div><div></div>
+        <div data-s="14" data-num="true"></div><div></div><div data-s="9"></div><div></div><div></div><div data-s="18" data-num="true"></div><div></div><div></div><div></div><div></div>
+        <div data-g="10" data-s="14" data-num="true"></div><div data-g="10"></div><div data-g="10" data-s="9"></div><div></div><div></div><div data-s="18" data-g="11" data-num="true"></div><div data-g="11"></div><div data-g="11" data-s="20" data-num="true"></div><div></div><div></div>
+        <div></div><div></div><div data-s="9" data-g="12" data-num="true"></div><div data-g="12"></div><div data-g="12"></div><div data-g="12" data-s="18"></div><div></div><div data-s="20" data-g="13" data-num="true"></div><div data-g="13"></div><div></div>
+    </div>
+    <div class="quiz-wrapper">
+        <h4>가로</h4>
+        <ul id="garoQ"></ul>
+        <h4>세로</h4>
+        <ul id="seroQ"></ul>
+        <div class="all-btn-wrapper">
+            <button id="allBtn">전체 정답</button>
+        </div>
+    </div>
+    <script>
+        const tmpl = d => {
+            const li = document.createElement('li');
+            li.dataset.type = d.type;
+            li.dataset.idx = d.idx;
+
+            li.innerHTML = `
+                <div>
+                    <strong>${d.idx}</strong>
+                    ${d.q}
+                </div>
+                <button data-id="showAnswer">정답</button>
+            `;
+
+            li.addEventListener('mouseover', (e) => {
+                document.querySelectorAll('[data-g], [data-s]').forEach((el) => {
+                    el.classList.remove('hover');
+                    if(el.dataset[d.type] == d.idx){
+                        el.classList.add('hover');
+                    }
+                })
+            })
+            li.addEventListener('mouseout', (e) => {
+                document.querySelectorAll('[data-g], [data-s]').forEach((el) => {
+                    el.classList.remove('hover');
+                })
+            })
+
+            li.querySelector('button').addEventListener('click', () => {
+                document.querySelectorAll('[data-g], [data-s]').forEach((el) => {
+                    el.classList.remove('hover');
+                    if(el.dataset[d.type] == d.idx){
+                        el.classList.add('hover');
+                    }
+                })
+
+                document.querySelectorAll(`[data-${d.type}="${d.idx}"]`).forEach((el, idx) => {
+                    el.textContent = d.a[idx];
+                })
+            });
+            return li;
+        }
+
+        fetch('./qa.json').then(async (res) => {
+            const data = await res.json();
+            const gQ = data.filter(q => q.type === 'g');
+            const sQ = data.filter(q => q.type === 's');
+
+            gQ.forEach((d) => {
+                document.getElementById('garoQ').appendChild(tmpl(d));
+            })
+            sQ.forEach((d) => {
+                document.getElementById('seroQ').appendChild(tmpl(d));
+            })
+
+            document.getElementById('allBtn').addEventListener('click', () => {
+                if(confirm('전체 답을 보시겠슴니까?')){
+                    document.querySelectorAll('[data-id="showAnswer"]').forEach((el) => {
+                        el.click();
+                    })
+                };
+            })
+        })
+    </script>
+</body>
+</html>
