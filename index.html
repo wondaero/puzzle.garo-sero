@@ -47,6 +47,7 @@
         }
         .puzzle-wrapper{
             width: 800px;
+            min-width: 800px;
             height: 800px;
             display: flex;
             justify-content: center;
@@ -68,9 +69,13 @@
         }
         .puzzle-wrapper > div.hover{
             background: #ff0!important;
+            transform: rotate(15deg);
+            z-index: 1;
         }
-        .puzzle-wrapper > div[data-g]{background: #fff; border: 1px solid #000;}
-        .puzzle-wrapper > div[data-s]{background: #fff; border: 1px solid #000;}
+        .puzzle-wrapper > div[data-g],
+        .puzzle-wrapper > div[data-s]{
+            background: #fff; border: 1px solid #000;
+        }
 
         .puzzle-wrapper > div[data-num]:after{
             content: '1';
